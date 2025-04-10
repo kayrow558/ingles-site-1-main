@@ -478,64 +478,7 @@
 
 
 
-      <!-- Botão para acessar a Galeria -->
-      <button class="access-gallery-btn" onclick="showGallerySection()">Acessar Galeria de Imagens</button>
-    </div>
-  </div>
-
-  <!-- ========== Seção da Galeria ========== -->
-  <div id="gallerySection">
-    <!-- Overlay de Boas-Vindas da Galeria (aparece somente quando a seção for exibida) -->
-    <div id="galleryWelcomeOverlay">
-      <div class="overlay-content">
-        <h3>Bem-vindo à Galeria de Imagens</h3>
-        <p>
-          Ao visualizar as imagens, você pode aumentar ou diminuir seu tamanho. Se a imagem ultrapassar a área visível, utilize a rolagem para ver todas as partes (para cima/baixo e para os lados).
-        </p>
-        <button class="gallery-view-image-btn" onclick="closeGalleryOverlay()">Entrar</button>
-      </div>
-    </div>
-
-    <div class="gallery-container">
-      <!-- Botão para voltar ao Relatório -->
-      <button class="back-report-btn" onclick="showReportSection()">Voltar para Relatórios</button>
-      <h2>📸 Galeria de Imagens</h2>
-      
-      <button class="gallery-accordion">🖼️ Imagem 1</button>
-      <div class="gallery-panel">
-        <button class="gallery-view-image-btn" onclick="showGalleryPopup('imagem 1.jpeg')">Ver Imagem</button>
-      </div>
-
-      <button class="gallery-accordion">🖼️ Imagem 2</button>
-      <div class="gallery-panel">
-        <p>O zoom está ativado. Caso tenha dificuldade de enxergar os textos, clique abaixo para ver a imagem.</p>
-        <button class="gallery-view-image-btn" onclick="showGalleryPopup('imagem 2.jpeg')">Ver Imagem</button>
-      </div>
-
-      <button class="gallery-accordion">🖼️ Imagem 3</button>
-      <div class="gallery-panel">
-        <p>O zoom está ativado. Caso tenha dificuldade de enxergar os textos, clique abaixo para ver a imagem.</p>
-        <button class="gallery-view-image-btn" onclick="showGalleryPopup('imgem 3.jpeg')">Ver Imagem</button>
-      </div>
-    </div>
-
-    <!-- Popup da Galeria -->
-    <div class="gallery-popup" id="galleryPopup">
-      <div class="gallery-popup-content">
-        <span class="gallery-close" onclick="closeGalleryPopup()">&times;</span>
-        <p>
-          Use os botões abaixo para aumentar ou diminuir a imagem. Se a imagem ultrapassar os limites da janela, utilize a rolagem para visualizar outras partes.
-        </p>
-        <img id="galleryPopupImg" src="" alt="Imagem">
-        <div class="gallery-zoom-controls">
-          <button class="gallery-zoom-btn" onclick="zoomGalleryImage(1.2)">Aumentar 🔍</button>
-          <button class="gallery-zoom-btn" onclick="zoomGalleryImage(0.8)">Diminuir 🔍</button>
-        </div>
-        <!-- Botão para fechar a imagem -->
-        <button class="gallery-view-image-btn" onclick="closeGalleryPopup()">Fechar Imagem</button>
-      </div>
-    </div>
-  </div>
+   
 
   <script>
     /* ===== Funções para alternar entre seções ===== */
