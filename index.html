@@ -1,0 +1,607 @@
+<!DOCTYPE html> 
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Aulas e Galeria de Imagens</title>
+  <style>
+    /* ================= Relatório de Aulas ================= */
+    #reportSection {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    #reportSection .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #reportSection h2 {
+      color: #333;
+    }
+    #reportSection .accordion {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: 0.4s;
+      font-size: 18px;
+      border-radius: 30px;
+      margin-top: 5px;
+    }
+    #reportSection .active, #reportSection .accordion:hover {
+      background-color: #3c97ff;
+    }
+    #reportSection .panel {
+      padding: 0 15px;
+      display: none;
+      background-color: white;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    #reportSection .panel p {
+      line-height: 1.6;
+    }
+    #reportSection .access-gallery-btn {
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+      margin: 20px auto 0;
+      display: block;
+    }
+    #reportSection .access-gallery-btn:hover {
+      background-color: #e64a19;
+    }
+
+    /* ================= Galeria de Imagens ================= */
+    /* Inicialmente oculta */
+    #gallerySection {
+      display: none;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    #gallerySection .gallery-container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #gallerySection h2 {
+      color: #333;
+    }
+    /* Botão para voltar à página de Relatórios */
+    #gallerySection .back-report-btn {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+      margin: 20px auto;
+      display: block;
+      width: fit-content;
+    }
+    #gallerySection .back-report-btn:hover {
+      background-color: #c82333;
+    }
+    #gallerySection .gallery-accordion {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: 0.4s;
+      font-size: 18px;
+      border-radius: 30px;
+      margin-top: 5px;
+    }
+    #gallerySection .gallery-active, 
+    #gallerySection .gallery-accordion:hover {
+      background-color: #3c97ff;
+    }
+    #gallerySection .gallery-panel {
+      padding: 10px;
+      display: none;
+      background-color: white;
+      overflow: hidden;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    /* Popup da Galeria */
+    #galleryPopup {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      overflow: auto;
+    }
+    #galleryPopup .gallery-popup-content {
+      position: relative;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 90%;
+      max-height: 90vh;
+      margin: 30px auto;
+      overflow: auto;
+    }
+    #galleryPopup img {
+      max-width: none;
+      height: auto;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    #galleryPopup .gallery-close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: red;
+    }
+    #gallerySection .gallery-view-image-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+    #gallerySection .gallery-view-image-btn:hover {
+      background-color: #218838;
+    }
+    #gallerySection .gallery-zoom-controls {
+      margin-top: 10px;
+    }
+    #gallerySection .gallery-zoom-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      margin: 5px;
+      border-radius: 5px;
+    }
+    #gallerySection .gallery-zoom-btn:hover {
+      background-color: #0056b3;
+    }
+    /* Overlay de Boas-Vindas da Galeria */
+    #galleryWelcomeOverlay {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #galleryWelcomeOverlay .overlay-content {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 90%;
+    }
+  </style>
+</head>
+<body>
+  <!-- ========== Seção do Relatório ========== -->
+  <div id="reportSection">
+    <div class="container">
+      <h2>📖 Relatório de Aulas de Inglês</h2>
+      
+      <button class="accordion">📚 Aula 1 - 28/01/2025</button>
+      <div class="panel">
+        <h3>📌 Coisas que Aprendi</h3>
+        <ul>
+          <li>✅ Ordem do verbo "To Be"</li>
+          <li>✅ Uso do "-ing" → Indica que algo está acontecendo (*ação em progresso*).</li>
+          <li>✅ Uso do "To" → Presente em palavras terminadas em "R" quando aparecem na frase.</li>
+          <li>✅ Formas compactadas e descompactadas de verbos.</li>
+        </ul>
+        <h3>✏️ Atividades da Aula</h3>
+        <ul>
+          <li>✅ Conversação → Conversei em inglês com a professora e consegui entender bem! 🎉</li>
+          <li>✅ Complete as frases com os verbos.</li>
+          <li>✅ Criar frases usando <em>To</em> e <em>-ing</em>.</li>
+          <li>✅ Escolher verbos e transformá-los.</li>
+        </ul>
+        <h3>🏠 Trabalho de Casa</h3>
+        <ul>
+          <li>📌 Decorar a ordem dos verbos.</li>
+          <li>📌 Traduzir frases.</li>
+          <li>📌 Resolver questões de completar palavras e escrever as frases na forma negativa.</li>
+          <li>📌 Memorizar frases.</li>
+        </ul>
+      </div>
+
+      <button class="accordion">📚 Aula 2 - 30/01/2025</button>
+      <div class="panel">
+        <h3>📌 Coisas que Aprendi</h3>
+        <ul>
+          <li>✅ Ordem do verbo "To Be"</li>
+          <li>✅ Uso do "-ing" → Indica que algo está acontecendo (*ação em progresso*).</li>
+          <li>✅ Uso do "To" → Presente em palavras terminadas em "R" quando aparecem na frase.</li>
+          <li>✅ Formas compactadas e descompactadas de verbos.</li>
+        </ul>
+        <h3>✏️ Atividades da Aula</h3>
+        <ul>
+          <li>✅ Conversação → Conversei em inglês com a professora e consegui entender bem! 🎉</li>
+          <li>✅ Complete as frases com os verbos.</li>
+          <li>✅ Criar frases usando <em>To</em> e <em>-ing</em>.</li>
+          <li>✅ Escolher verbos e transformá-los.</li>
+        </ul>
+        <h3>🏠 Trabalho de Casa</h3>
+        <ul>
+          <li>📌 Decorar a ordem dos verbos.</li>
+          <li>📌 Traduzir frases.</li>
+          <li>📌 Resolver questões de completar palavras e escrever as frases na forma negativa.</li>
+          <li>📌 Memorizar frases.</li>
+        </ul>
+      </div>
+
+      <button class="accordion">📚 Aula 3 - 04/02/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Estudados</h3>
+        <ul>
+          <li>✅ Negatives (*Frases negativas*)</li>
+          <li>✅ Positives (*Frases positivas*)</li>
+          <li>✅ Verbo "To Be"</li>
+          <li>✅ Interrogativas (*Perguntas*)</li>
+        </ul>
+        <h3>✏️ Atividades da Aula</h3>
+        <ul>
+          <li>✅ Escrever frases positivas, negativas e interrogativas.</li>
+          <li>✅ Traduzir frases negativas e positivas.</li>
+        </ul>
+      </div>
+
+      <button class="accordion">📚 Aula 4 - 02/11/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Estudados</h3>
+        <ul>
+          <li>✅ To Be Continuous</li>
+          <li>✅ Past To Be</li>
+        </ul>
+        <h3>✏️ Atividades da Aula</h3>
+        <ul>
+          <li>✅ Escrevi textos no presente em frases afirmativas e interrogativas.</li>
+          <li>✅ Escrevi textos no passado, incluindo frases afirmativas e interrogativas.</li>
+          <li>✅ Decorar o To Be no passado.</li>
+        </ul>
+      </div>
+
+      <button class="accordion">📚 Aula 5 - 13/02/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados</h3>
+        <ul>
+          <li>✅ Os tipos de "Que"</li>
+          <li>✅ When, Who, Where, Whose, What, Which</li>
+          <li>✅ To wear (vestir), To make (fazendo com as mãos), Doing (para perguntas), To do (fazendo com a cabeça)</li>
+        </ul>
+        <h3>✏️ Trabalho de Casa</h3>
+        <ul>
+          <li>✅ Completar as frases com "she is", "they are", "aren't", etc.</li>
+          <li>✅ Responder perguntas.</li>
+          <li>✅ Escrever o significado de cada coisa de acordo com a imagem.</li>
+          <li>✅ Responder as questões trabalhadas em sala no caderno.</li>
+        </ul>
+      </div>
+
+      <button class="accordion">📚 Aula 6 - 18/02/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ Li textos em inglês e dei o feedback sobre o que descobri dos três textos lidos.</li>
+          <li>✅ Respondi atividades de transformação de frases em negativas e positivas.</li>
+          <li>✅ Li frases em inglês.</li>
+          <li>✅ Traduzi algumas frases do inglês para o português.</li>
+        </ul>
+        <h3>✏️ Trabalho de Casa</h3>
+        <ul>
+          <li>📌 Revisar a Unidade 2 que foi feita em sala.</li>
+          <li>📌 Estudar o alfabeto em inglês.</li>
+        </ul>
+      </div>
+
+      <button class="accordion">📚 Aula 7 - 19/02/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ Peguei frases do texto que não entendi o significado, escrevi em uma folha e a professora traduziu.</li>
+          <li>✅ Respondi questões referentes aos textos que li.</li>
+          <li>✅ Conversei em inglês com a professora.</li>
+        </ul>
+        <h3>✏️ Trabalho de Casa</h3>
+        <ul>
+          <li>📌 Unidade 3 – Treinar o alfabeto.</li>
+          <li>📌 Ler o texto em inglês.</li>
+          <li>📌 Passar a limpo as atividades que eu errei.</li>
+        </ul>
+      </div>
+      
+
+      <button class="accordion">📚 Aula 8 </button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ escrevi 60 palavras em ingles no present Continuous </li>
+          <li>✅ no inicio da aula conversei em ingles com a professora </li>
+      </div>
+
+      <button class="accordion">📚 Aula 9</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ aprendi sober o would  </li>
+          <li>✅ escrevi 10 palavras com o would</li>
+      </div>
+
+
+
+      <button class="accordion">📚 Aula 10</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ a professora passou atividade de Completar as frases com o verbo   </li>
+ 
+      </div>
+
+
+
+
+
+
+
+      <button class="accordion">📚 Aula 11 - 28/01/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ Verbo To Be – junção de palavras (I am, You are)</li>
+          <li>✅ Greetings – cumprimentos</li>
+          <li>✅ Tópicos gramaticais introduzidos: Simple Present, Simple Past, Future, Present Perfect, Past Perfect</li>
+        </ul>
+        <h3>🧠 Pronomes Pessoais & Exemplos</h3>
+        <ul>
+          <li>I am well – Eu estou bem</li>
+          <li>She not well – Ela não está bem</li>
+          <li>It – usado para objetos ou animais</li>
+          <li>They are my brother – Eles são meu irmão</li>
+          <li>We – nós</li>
+          <li>Are – ser ou estar</li>
+        </ul>
+        <h3>🧠 Vocabulário Novo</h3>
+        <ul>
+          <li>well – bem</li>
+          <li>out – fora/sem</li>
+          <li>without – sem</li>
+          <li>with – com</li>
+        </ul>
+      </div>
+      
+      <button class="accordion">📚 Aula 12 - 14/03/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ DO e DOES – perguntas no presente</li>
+          <li>✅ WILL – perguntas no futuro</li>
+          <li>✅ DID – perguntas no passado</li>
+          <li>✅ Uso de TO (para com movimento)</li>
+          <li>✅ Diferença entre DO (auxiliar) e MAKE (verbo fazer)</li>
+        </ul>
+        <h3>📝 Exemplos de Frases</h3>
+        <ul>
+          <li>Can you make something today?</li>
+          <li>Will she go to school at 9 tomorrow?</li>
+          <li>What do you like in your work?</li>
+        </ul>
+      </div>
+      
+      <button class="accordion">📚 Aula 13 - 20/03/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ Uso de CAN e CAN'T para perguntas e negativas</li>
+          <li>✅ Formação de frases com "What do you...?" para perguntas abertas</li>
+        </ul>
+        <h3>📝 Exemplos de Frases</h3>
+        <ul>
+          <li>Can you go to the airport with me?</li>
+          <li>Can’t you stay at work today?</li>
+          <li>What do you like to do in the park?</li>
+        </ul>
+      </div>
+      
+      <button class="accordion">📚 Aula 14 - 02/11/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ Verbo To Be no passado (was / were)</li>
+          <li>✅ Past Continuous (To Be + verbo com -ing)</li>
+          <li>✅ Escrita de frases no presente e passado em forma afirmativa e interrogativa</li>
+        </ul>
+        <h3>🧠 Tabela do Verbo To Be no Passado</h3>
+        <ul>
+          <li>I was</li>
+          <li>You were</li>
+          <li>He was / She was / It was</li>
+          <li>We were / You were / They were</li>
+        </ul>
+      </div>
+      
+      <button class="accordion">📚 Aula 15 - 13/03/2025</button>
+      <div class="panel">
+        <h3>📌 Conteúdos Trabalhados em Sala</h3>
+        <ul>
+          <li>✅ Tradução e interpretação de vídeos</li>
+          <li>✅ Ampliação de vocabulário em inglês com foco em tecnologia, comunicação e cotidiano</li>
+        </ul>
+        <h3>🧠 Vocabulário Aprendido</h3>
+        <ul>
+          <li>because, thinking, tech, answer, bought, this, see, get, for, our, that, met, given, been, meaning, however, down, managed, take, off, know, can, above, won’t, lie, thing, about, device, overall, comes, an, give, came, throughout, which, guess, made, feel, set, at, currently, pretty, getting, into, even, here, joking, meal, lot, would, anymore, woke, wondering, flown, will, wait, make</li>
+        </ul>
+      </div>
+      
+
+
+
+
+
+      <!-- Botão para acessar a Galeria -->
+      <button class="access-gallery-btn" onclick="showGallerySection()">Acessar Galeria de Imagens</button>
+    </div>
+  </div>
+
+  <!-- ========== Seção da Galeria ========== -->
+  <div id="gallerySection">
+    <!-- Overlay de Boas-Vindas da Galeria (aparece somente quando a seção for exibida) -->
+    <div id="galleryWelcomeOverlay">
+      <div class="overlay-content">
+        <h3>Bem-vindo à Galeria de Imagens</h3>
+        <p>
+          Ao visualizar as imagens, você pode aumentar ou diminuir seu tamanho. Se a imagem ultrapassar a área visível, utilize a rolagem para ver todas as partes (para cima/baixo e para os lados).
+        </p>
+        <button class="gallery-view-image-btn" onclick="closeGalleryOverlay()">Entrar</button>
+      </div>
+    </div>
+
+    <div class="gallery-container">
+      <!-- Botão para voltar ao Relatório -->
+      <button class="back-report-btn" onclick="showReportSection()">Voltar para Relatórios</button>
+      <h2>📸 Galeria de Imagens</h2>
+      
+      <button class="gallery-accordion">🖼️ Imagem 1</button>
+      <div class="gallery-panel">
+        <button class="gallery-view-image-btn" onclick="showGalleryPopup('imagem 1.jpeg')">Ver Imagem</button>
+      </div>
+
+      <button class="gallery-accordion">🖼️ Imagem 2</button>
+      <div class="gallery-panel">
+        <p>O zoom está ativado. Caso tenha dificuldade de enxergar os textos, clique abaixo para ver a imagem.</p>
+        <button class="gallery-view-image-btn" onclick="showGalleryPopup('imagem 2.jpeg')">Ver Imagem</button>
+      </div>
+
+      <button class="gallery-accordion">🖼️ Imagem 3</button>
+      <div class="gallery-panel">
+        <p>O zoom está ativado. Caso tenha dificuldade de enxergar os textos, clique abaixo para ver a imagem.</p>
+        <button class="gallery-view-image-btn" onclick="showGalleryPopup('imgem 3.jpeg')">Ver Imagem</button>
+      </div>
+    </div>
+
+    <!-- Popup da Galeria -->
+    <div class="gallery-popup" id="galleryPopup">
+      <div class="gallery-popup-content">
+        <span class="gallery-close" onclick="closeGalleryPopup()">&times;</span>
+        <p>
+          Use os botões abaixo para aumentar ou diminuir a imagem. Se a imagem ultrapassar os limites da janela, utilize a rolagem para visualizar outras partes.
+        </p>
+        <img id="galleryPopupImg" src="" alt="Imagem">
+        <div class="gallery-zoom-controls">
+          <button class="gallery-zoom-btn" onclick="zoomGalleryImage(1.2)">Aumentar 🔍</button>
+          <button class="gallery-zoom-btn" onclick="zoomGalleryImage(0.8)">Diminuir 🔍</button>
+        </div>
+        <!-- Botão para fechar a imagem -->
+        <button class="gallery-view-image-btn" onclick="closeGalleryPopup()">Fechar Imagem</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Funções para alternar entre seções ===== */
+    function showGallerySection() {
+      // Oculta a seção do Relatório e exibe a seção da Galeria
+      document.getElementById("reportSection").style.display = "none";
+      document.getElementById("gallerySection").style.display = "block";
+    }
+
+    function showReportSection() {
+      // Oculta a seção da Galeria e exibe a seção do Relatório
+      document.getElementById("gallerySection").style.display = "none";
+      document.getElementById("reportSection").style.display = "block";
+    }
+
+    /* ===== Script para o Relatório ===== */
+    var acc = document.getElementsByClassName("accordion");
+    for (var i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        panel.style.display = (panel.style.display === "block") ? "none" : "block";
+      });
+    }
+
+    /* ===== Script para a Galeria ===== */
+    // Ao carregar a Galeria, garante que os painéis estejam abertos para facilitar o acesso
+    window.addEventListener("load", function() {
+      var galleryPanels = document.getElementsByClassName("gallery-panel");
+      for (var i = 0; i < galleryPanels.length; i++) {
+        galleryPanels[i].style.display = "block";
+      }
+      // Garante que o popup da galeria esteja fechado
+      closeGalleryPopup();
+    });
+
+    var galleryAccordions = document.getElementsByClassName("gallery-accordion");
+    for (var i = 0; i < galleryAccordions.length; i++) {
+      galleryAccordions[i].addEventListener("click", function() {
+        this.classList.toggle("gallery-active");
+        var panel = this.nextElementSibling;
+        panel.style.display = (panel.style.display === "block") ? "none" : "block";
+      });
+    }
+
+    function showGalleryPopup(imageSrc) {
+      document.getElementById("galleryPopupImg").src = imageSrc;
+      document.getElementById("galleryPopupImg").style.transform = "scale(1)";
+      document.getElementById("galleryPopup").style.display = "block";
+    }
+
+    function closeGalleryPopup() {
+      document.getElementById("galleryPopup").style.display = "none";
+    }
+
+    function zoomGalleryImage(factor) {
+      var img = document.getElementById("galleryPopupImg");
+      var currentScale = img.style.transform.match(/scale\\((.*)\\)/);
+      var scale = currentScale ? parseFloat(currentScale[1]) : 1;
+      scale *= factor;
+      img.style.transform = "scale(" + scale + ")";
+    }
+
+    function closeGalleryOverlay() {
+      document.getElementById("galleryWelcomeOverlay").style.display = "none";
+    }
+  </script>
+</body>
+</html>
